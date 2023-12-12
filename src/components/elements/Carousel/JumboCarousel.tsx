@@ -51,7 +51,7 @@ const JumboCarousel = () => {
   };
 
   return (
-    <div className="pt-36">
+    <div className="pt-7">
     <div
        onMouseEnter={() => setArrowShow(true)}
        onMouseLeave={() => setArrowShow(false)}

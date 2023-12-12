@@ -1,7 +1,7 @@
-import CardPromo from "../elements/Card/CardPromo";
-import CountDownSale from "../elements/Card/CountDownSale";
+import CardPromo from "../../elements/Card/CardPromo";
+import CountDownSale from "../../elements/Card/CountDownSale";
 
-import "../elements/Carousel/jumbo.css";
+
 
 const CardPromoLayout = () => {
  
@@ -28,6 +28,8 @@ const CardPromoLayout = () => {
         </div>
 
         <div className="w-full absolute left-32 flex items-center gap-5 overflow-x-hidden">
+
+
         <CardPromo />
         <CardPromo />
         <CardPromo />
