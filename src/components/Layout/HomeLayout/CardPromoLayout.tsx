@@ -1,11 +1,7 @@
 import CardPromo from "../../elements/Card/CardPromo";
 import CountDownSale from "../../elements/Card/CountDownSale";
 
-
-
 const CardPromoLayout = () => {
- 
-
   return (
     <div className=" py-7 px-1 mx-7 border-b">
       <div className="flex items-center gap-2">
@@ -18,7 +14,6 @@ const CardPromoLayout = () => {
       </div>
 
       <div className="mt-3 flex items-center relative w-full">
-    
         <div className=" w-[23%] py-5 px-3 flex justify-start items-start bg-purple-300 rounded-lg">
           <img
             className="w-24 h-[300px] object-cover"
@@ -27,20 +22,10 @@ const CardPromoLayout = () => {
           />
         </div>
 
-        <div className="w-full absolute left-32 flex items-center gap-5 overflow-x-hidden">
-
-
-        <CardPromo />
-        <CardPromo />
-        <CardPromo />
-        <CardPromo />
-        <CardPromo />
        
-
-       
-        </div>
-
-    
+          <CardPromo />
+         
+        
       </div>
     </div>
   );

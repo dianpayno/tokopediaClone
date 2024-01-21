@@ -1,64 +1,116 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useCart } from "../../contex/CartContex";
 
 type Props = {
   scrolledImg: boolean;
-}
-const LeftSection = (props: Props) => {
-  const [isActive, setIsActive] = useState(1);
-  const img = [
-    {
-      id: 1,
-      img: "https://images.tokopedia.net/img/cache/900/VqbcmM/2023/3/21/9f359fa6-1237-462a-b6a2-2aa6173a0756.jpg",
-    },
-    {
-      id: 2,
-      img: "https://images.tokopedia.net/img/cache/900/VqbcmM/2023/2/7/d7e3f4b0-55ed-4c40-9643-704c661d863a.png",
-    },
-    {
-      id: 3,
-      img: "https://images.tokopedia.net/img/cache/900/VqbcmM/2021/10/21/3408264c-001a-43af-972d-f996b4a152a1.jpg",
-    },
-    {
-      id: 4,
-      img: "https://images.tokopedia.net/img/cache/900/VqbcmM/2021/10/21/bb7e5702-716d-403c-be66-56e5e2d12300.jpg",
-    },
-  ];
-
-  const filteredImg = img.filter((item: any, index: number) => {
-    return index === isActive;
+  image: any;
+ 
+};
+const LeftSection = ({scrolledImg, image}: Props) => {
+  const {setOpenModal} = useCart();
+  const [isActive, setIsActive] = useState(0);
+  const [arrowShow, setArrowShow] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+  const [imageLength, setImageLength] = useState(0);
+  const itemPerPage = 4;
+  const endIndex = Math.min(startIndex + itemPerPage);
+  const visibleImage = image?.slice(startIndex, endIndex);
+  const filteredImg = image?.filter((item: any, index: number) => {
+    if (index === isActive) {
+      return item;
+    }
+    item;
   });
 
+  useEffect(() => {
+    setImageLength(image?.length);
+  }, [image?.length]);
+
+  const handleNext = () => {
+    if (endIndex < image.length) {
+      setStartIndex(startIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (endIndex > 0) {
+      setStartIndex(startIndex - 1);
+    }
+  };
+  const handleActive = (index: number) => {
+    if (startIndex !== 0) {
+      setIsActive(index + 1);
+    } else {
+      setIsActive(index);
+    }
+  };
+
   return (
-    <div className={`${props.scrolledImg ? "sticky top-52" : "fixed top-48 left-36"}`}>
-        <div className="flex flex-col items-center">
-      {filteredImg.map((item: any, index: number) => {
-        return (
-          <img
-            key={index}
-            className="w-[250px] h-[250px] object-contain rounded-lg mb-5"
-            src={item.img}
-            alt=""
-          />
-        );
-      })}
-      <div className="flex justify-center items-center gap-3">
-        {img.map((item: any, index: number) => {
-          const active = index === isActive;
+    <div
+      className={`${
+        scrolledImg ? "sticky top-48 left-32" : "fixed top-48 left-32"
+      } pb-10`}
+    >
+      <div className="flex flex-col items-center">
+
+        
+        
+
+        {filteredImg?.map((item: any, index: number) => {
           return (
             <img
               key={index}
-              onClick={() => setIsActive(index)}
-              className={`w-11 h-11 object-cover rounded-lg overflow-hidden  ${
-                active ? "border-2 border-green-500 " : null
-              } `}
-              src={item.img}
+              onClick={() =>setOpenModal(true)}
+              className="w-[250px] h-[250px] object-contain cursor-pointer rounded-lg mb-5"
+              src={item}
               alt=""
             />
           );
         })}
-      </div>
+        <div
+          onMouseEnter={() => setArrowShow(true)}
+          onMouseLeave={() => setArrowShow(false)}
+          className="p-1 relative flex justify-center items-center gap-2"
+        >
+          {startIndex === 0 ? null : (
+            <button onClick={handlePrev}>
+              <IoIosArrowBack
+                size={25}
+                className={`${
+                  arrowShow ? "block" : "hidden"
+                } absolute top-1/2 -translate-y-1/2 left-0  hover:shadow-md cursor-pointer rounded-full p-1 text-gray-500 bg-white`}
+              />
+            </button>
+          )}
+          {endIndex === imageLength || imageLength < 4 ? null : (
+            <button onClick={handleNext}>
+              <IoIosArrowForward
+                size={25}
+                className={`${
+                  arrowShow ? "block" : "hidden"
+                } absolute top-1/2 -translate-y-1/2 -right-3  hover:shadow-md cursor-pointer rounded-full p-1 text-gray-500 bg-white`}
+              />
+            </button>
+          )}
+          {visibleImage?.map((item: any, index: number) => {
+            const active =
+              startIndex !== 0 ? index + 1 === isActive : index === isActive;
+
+            return (
+              <img
+                key={index}
+                onMouseEnter={() => handleActive(index)}
+                className={`w-11 h-11 object-cover rounded-lg overflow-hidden cursor-pointer  ${
+                  active ? "border-2 border-green-500 " : null
+                } `}
+                src={item}
+                alt=""
+              />
+            );
+          })}
         </div>
-    
+      </div>
     </div>
   );
 };

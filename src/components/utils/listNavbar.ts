@@ -1,8 +1,8 @@
 export const  ListNavbar =[
     {
         id:1,
-        title:"tentang tokopedia",
-        link:"/tokpedcare"
+        title:"try to add product",
+        link:"/add-product"
     },
     {
         id:2,

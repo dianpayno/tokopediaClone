@@ -8,7 +8,12 @@ type Props = {
 };
 const CheckOutSection = (props: Props) => {
   const { totalBelanja, totalQty, diskon } = props;
-  const totalSetelahDiskon = totalBelanja - diskon;
+ 
+  const totalDiskon = Math.ceil(diskon/100)*100;
+  const totalSetelahDiskon = Math.ceil((totalBelanja - totalDiskon)/100)*100;
+ 
+  
+  
 
   return (
     <div className="w-full flex flex-col  border border-gray-300 rounded-lg shadow-sm">
@@ -30,7 +35,7 @@ const CheckOutSection = (props: Props) => {
         <div className="flex justify-between">
           <p className="text-gray-500">Total Harga ({totalQty} barang)</p>
           <p className="text-gray-500">
-            {totalBelanja.toLocaleString("id-ID", {
+            {Math.ceil((totalBelanja/100)*100).toLocaleString("id-ID", {
               style: "currency",
               currency: "IDR",
               minimumFractionDigits: 0,
@@ -43,7 +48,7 @@ const CheckOutSection = (props: Props) => {
               <p className="text-gray-500">Total Diskon</p>
               <p className="text-gray-500">
                 -
-                {diskon.toLocaleString("id-ID", {
+                {totalDiskon.toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
                   minimumFractionDigits: 0,

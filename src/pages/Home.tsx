@@ -17,7 +17,7 @@ const Home = () => {
       <NavbarLayout />
       <JumboCarousel /> 
        <KategoryTopUpLayout /> 
-      {/* <CardPromoLayout /> */}
+      <CardPromoLayout />
       <ForYouLayout/> 
       <ProductList/>
       <FooterLayout/>

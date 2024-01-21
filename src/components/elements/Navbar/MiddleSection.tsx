@@ -2,25 +2,38 @@ import { LiaShoppingCartSolid } from "react-icons/lia";
 import { CiSearch } from "react-icons/ci";
 import { useState } from "react";
 import Kategori from "./Kategori";
+import EmptyCartHover from "../../elements/Cart/EmptyCartHover";
 import { useCategory } from "../../contex/display";
 import { useCart } from "../../contex/CartContex";
 import CartHover from "../../elements/Cart/CartHover";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const MiddleSection = () => {
   const [searchActive, setSearchActive] = useState(false);
   const [isCartHover, setIsCartHover] = useState(false);
-
   const { kategory, setKategory } = useCategory();
-  const { cart } = useCart();
+  const {dataCart} = useCart();
+
+  const qtyCart = dataCart?.reduce((acc: number, item: any) => {
+    return acc + Number(item.qty);
+  },0)
+ 
+  
+
+ 
+
   return (
     <div className="py-3 px-7 flex items-center justify-between">
       <div className="flex items-center gap-10">
         <div>
-          <img
-            className="w-32"
-            src="https://ecs7.tokopedia.net/assets-tokopedia-lite/v2/zeus/production/e5b8438b.svg"
-          />
+          <Link to={"/"}>
+            <img
+            onMouseEnter={() => setKategory(false)}
+              className="w-32"
+              src="https://ecs7.tokopedia.net/assets-tokopedia-lite/v2/zeus/production/e5b8438b.svg"
+            />
+          </Link>
         </div>
         <div
           onMouseEnter={() => setKategory(true)}
@@ -33,13 +46,14 @@ const MiddleSection = () => {
         <div className="z-50">{kategory && <Kategori />}</div>
       </div>
       <div
-       onMouseEnter={() => setIsCartHover(false)}
+        onMouseEnter={() => setIsCartHover(false)}
         className={`w-1/2 border relative ${
           searchActive ? "border-green-600" : "border-gray-300"
         }  flex items-center  rounded-lg px-1`}
       >
         <CiSearch className="w-6 h-6 text-gray-500" />
         <input
+          onMouseEnter={() => setKategory(false)}
           onFocus={() => setSearchActive(true)}
           onBlur={() => setSearchActive(false)}
           className="w-full px-3 py-2 capitalize  outline:none focus:outline-none placeholder:opacity-60 placeholder-gray-400"
@@ -93,6 +107,7 @@ const MiddleSection = () => {
                   src="https://images.tokopedia.net/img/jbZAUJ/2022/7/18/cc8a16cf-3b71-4d30-994a-dbe1d5ea6c95.png"
                   alt=""
                 />
+
                 <p className="capitalize">tips & trik pencarian</p>
               </div>
               <div>
@@ -102,47 +117,57 @@ const MiddleSection = () => {
           </div>
         )}
       </div>
-      <div 
-     
-      className="flex items-center relative">
-        <div 
-        onMouseEnter={() => setIsCartHover(true)}
-        className="pe-10 relative cursor-pointer">
-          {cart === 0 ? null : (
+      <div className="flex items-center relative">
+        <div
+          onMouseEnter={() => setIsCartHover(true)}
+          className="pe-10 relative cursor-pointer"
+        >
+          {dataCart?.length === 0 ? null : (
             <div
               className={`w-[22px] h-[22px] rounded-full bg-red-600 border border-white flex items-center justify-center  absolute right-8 -top-1`}
             >
               <p className="text-white text-xs  font-bold">
-                {cart >= 10 ? "10+" : cart}
+                {qtyCart >= 10 ? "10+" : qtyCart}
               </p>
             </div>
           )}
           <LiaShoppingCartSolid className="w-8 h-8" />
         </div>
         {isCartHover && (
-          <motion.div 
-          initial={{y:-20, opacity:0.5}}
-          animate={{y:0, opacity:1}}
-          transition={{duration: 0.3, type:"keyframes"}}
-          onMouseLeave={() => setIsCartHover(false)}
-          className="
-          absolute top-12 bg-white shadow-lg -left-52 rounded-b-lg right-24 z-[100]">
-            <CartHover />
+          <motion.div
+            initial={{ y: -20, opacity: 0.5 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3, type: "keyframes" }}
+            onMouseLeave={() => setIsCartHover(false)}
+            className="
+          absolute top-12 bg-white shadow-lg -left-52 rounded-b-lg right-24 z-[100]"
+          >{
+            dataCart?.length === 0 ? <EmptyCartHover /> : <CartHover dataProduk={dataCart} />
+          }
+           
           </motion.div>
         )}
-        <div 
-         onMouseEnter={() => setIsCartHover(false)}
-        className="flex gap-3 ps-10 border-l-2 border-gray-200 ">
+        <div
+          onMouseEnter={() => setIsCartHover(false)}
+          className="flex gap-3 ps-10 border-l-2 border-gray-200 "
+        >
+          <Link to="/login">
           <button className="bg-white-600 text-green-600 font-bold text-xs capitalize border border-green-600 px-4 py-[7px] rounded-lg">
             masuk
           </button>
+          </Link>
+          <Link to="/register">
           <button className="text-white bg-green-600 font-bold text-xs capitalize border border-green-600 px-4 py-[7px] rounded-lg">
             daftar
           </button>
+          </Link>
         </div>
-        {isCartHover && <div 
-        onMouseEnter={() => setIsCartHover(false)}
-        className="overlay"></div>}
+        {isCartHover && (
+          <div
+            onMouseEnter={() => setIsCartHover(false)}
+            className="overlay"
+          ></div>
+        )}
       </div>
     </div>
   );

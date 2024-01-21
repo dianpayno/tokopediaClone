@@ -28,7 +28,7 @@ const KategoryTopUpLayout = () => {
   return (
     <div className="p-8">
       <div className="w-full flex flex-wrap bg-white shadow-lg rounded-xl overflow-hidden">
-        <div className="p-2 w-[53%] ">
+        <div className="p-2 w-[53%]">
           <p className="text-xl font-semibold capitalize">Kategori pilihan</p>
           <Kategorypilihan />
         </div>

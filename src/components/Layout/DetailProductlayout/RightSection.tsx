@@ -5,39 +5,78 @@ import { BsChatLeftText } from "react-icons/bs";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { useCart } from "../../contex/CartContex";
-import { FaCircleCheck } from "react-icons/fa6";
+import { useMutation } from "react-query";
+import { db } from "../../firebase/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import Toast from "../../elements/Toast/Toast";
 
-const RightSection = () => {
+
+type Props = {
+  data: any;
+  produkId: any;
+};
+const RightSection = (props: Props) => {
+  const { data, produkId } = props;
+  const sale = (Number(data.harga) * Number(data.sale)) / 100;
+
+  const totalSale = Math.ceil(sale / 100) * 100;
+  const diskon = Math.ceil((Number(data.harga) - totalSale) / 100) * 100;
+    ;
   const [addCatatan, setAddCatatan] = useState(false);
   const [qtyCart, setQtyCart] = useState(1);
-  const {cart, setCart } = useCart();
+  const { dataCart, hours, minutes, seconds } = useCart();
   const [toast, setToast] = useState(false);
-  const handleCart = () => {
-    setCart(cart + qtyCart);
-    setToast(true);
+  const [catatan, setCatatan] = useState("");
+
+  const sameDataCart = dataCart.filter((item: any) => item.id === produkId);
+  const dataQty = sameDataCart.reduce((acc: number, item: any) => {
+    return acc + item.qty;
+  }, 0);
+
+  const newDataCart = {
+    namaProduk: data?.namaProduk,
+    namaToko: data?.namaToko,
+    alamatToko: data?.alamatToko,
+    harga: data?.harga,
+    sale: data?.sale,
+    stok: data?.stok,
+    image: data?.image,
+    qty: qtyCart + dataQty,
+    catatan,
   };
+
+  const { mutate: addToCart, isLoading } = useMutation(
+    async () => {
+      try {
+        await setDoc(doc(db, "cart", `${produkId}`), newDataCart);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    {
+      onSuccess: () => {
+        setToast(true);
+        setAddCatatan(false);
+      },
+    }
+  );
+
   useEffect(() => {
     if (toast) {
       setTimeout(() => {
         setToast(false);
       }, 2000);
     }
-   
-  },[toast])
-  const maxPurchase: number = 9;
-  const harga: number = 55000;
+  }, [toast]);
 
   return (
     <div className="mx-16 w-full">
+      {toast && (
+        <Toast title={`berhasil memasukan ke keranjang sebanyak ${qtyCart} buah`} />
+      )}
+
       {
-        toast &&
-      <div className="absolute -top-12 flex items-center justify-center right-5 left-5 bg-gradient-to-r from-red-500 to-red-300 h-10 rounded-lg">
-        <p className="text-center text-xs text-white font-semibold capitalize flex items-center gap-1">
-          <FaCircleCheck />
-          berhasil memasukan ke keranjang sebanyak {qtyCart} buah
-        </p>
-      </div>
-      }
+        sale === 0 ? null:
       <div className="flex justify-between w-full bg-gradient-to-r from-red-500 to-red-300 rounded px-5 py-2">
         <div className="flex flex-col w-1/2">
           <p className=" text-white font-bold capitalize text-sm mb-1">
@@ -54,10 +93,11 @@ const RightSection = () => {
         <div>
           <p className="text-xs text-white capitalize">berakhir dalam</p>
           <div className="px-4 py-1 bg-white rounded-xl mt-1 w-full">
-            <p className="text-xs font-bold text-red-600">07 : 00 : 00</p>
+            <p className="text-xs font-bold text-red-600">0{hours} : {minutes< 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}</p>
           </div>
         </div>
       </div>
+      }
 
       {/* keranjang */}
 
@@ -77,7 +117,7 @@ const RightSection = () => {
             </button>
             <p>{qtyCart}</p>
             <button>
-              {qtyCart === maxPurchase ? (
+              {qtyCart === data.minpesanan ? (
                 <LuPlus className=" text-gray-500" />
               ) : (
                 <LuPlus
@@ -88,16 +128,17 @@ const RightSection = () => {
             </button>
           </div>
           <p className="text-sm capitalize">
-            stock total : <span className="font-bold text-sm">182</span>
+            stock total : <span className="font-bold text-sm">{data.stok}</span>
           </p>
         </div>
         <p className="text-xs capitalize text-gray-500 mb-2">
-          max. pembelian {maxPurchase} pcs
+          max. pembelian {data.minpesanan} pcs
         </p>
 
         {addCatatan ? (
           <div>
             <input
+              onChange={(e) => setCatatan(e.target.value)}
               placeholder="contoh size:M warna:merah"
               className="w-full border border-green-600 focus:border-none focus:outline focus:outline-green-600 
                   text-sm placeholder:capitalize
@@ -124,14 +165,20 @@ const RightSection = () => {
         )}
         <div>
           <div className="flex justify-end">
-            <p className="capitalize text-xs text-gray-500 line-through">
-              rp68.500
-            </p>
+            {Number(data.sale) === 0 ? null : (
+              <p className="capitalize text-xs text-gray-500 line-through">
+                {Number(data.harga).toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                  minimumFractionDigits: 0,
+                })}
+              </p>
+            )}
           </div>
           <div className="flex justify-between">
             <p className="text-md font-bold">Subtotal</p>
             <p className="text-xl font-bold capitalize">
-              {(qtyCart * harga).toLocaleString("id-ID", {
+              {(qtyCart * diskon).toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
                 minimumFractionDigits: 0,
@@ -143,8 +190,9 @@ const RightSection = () => {
               Beli
             </button>
             <button
-              onClick={handleCart}
-              className="flex items-center w-1/2 px-5 py-2 bg-green-600 text-white font-bold rounded-xl"
+              disabled={isLoading}
+              onClick={() => addToCart()}
+              className="flex items-center disabled:bg-slate-400 w-1/2 px-5 py-2 bg-green-600 text-white font-bold rounded-xl"
             >
               <LuPlus />
               Keranjang

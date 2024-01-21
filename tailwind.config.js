@@ -7,6 +7,7 @@ export default {
   theme: {
     fontFamily: {
       'sans': ['Roboto', 'sans-serif']
+   
     },
   },
   plugins: [require("daisyui")],

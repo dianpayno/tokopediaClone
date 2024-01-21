@@ -9,7 +9,7 @@ import Kebutuhanharian from "./KategoryDetails/Kebutuhanharian";
 import Tagihan from "./KategoryDetails/Tagihan";
 import { useCategory } from "../../contex/display";
 
-
+import { motion } from "framer-motion";
 
 const Kategori = () => {
 
@@ -17,7 +17,11 @@ const Kategori = () => {
   const [activeLeft, setActiveLeft] = useState(0);
   const { setKategory } = useCategory();
   return (
-    <div
+    <motion.div
+     initial={{y: -20, opacity: 0 }}
+     animate={{ y: 0, opacity: 1 }}
+     transition={{ duration: 0.2 }}
+     
      onMouseLeave={() => setKategory(false)}
       className="w-full fixed z-[999] bg-white top-32 left-0 right-0 bottom-0  py-3"
     >
@@ -91,7 +95,7 @@ const Kategori = () => {
           </div>
         )
       }
-    </div>
+    </motion.div>
   );
 };
 

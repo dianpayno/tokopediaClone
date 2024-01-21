@@ -1,7 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ForYouLayout = () => {
     const [active, setActive] = useState(0);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      if (position > 900 && position < 1800) {
+      
+        setScrolled(true);
+        console.log("ini 500");
+    } else{
+        setScrolled(false);
+        console.log("ini ke-3");
+    }
+  }
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    }
+    },[])
   const label = [
     {
       id: 1,
@@ -21,7 +41,7 @@ const ForYouLayout = () => {
     },
   ];
   return (
-    <div className="mt-3 bg-white p-7 ">
+    <div className={`${scrolled? "fixed top-28 left-0 right-0 z-[999]": "relative"}mt-3 bg-white p-7 `}>
       <div className="flex gap-2">
         {label.map((item: any, index: number) => {
             const isActive = active === index 
