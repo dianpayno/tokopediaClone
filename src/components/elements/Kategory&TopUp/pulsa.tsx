@@ -74,7 +74,7 @@ const Pulsa = () => {
             {isOpen && (
               <div className="bg-white border border-gray-300 rounded-md absolute top-10 left-0 w-full h-32 shadow overflow-y-scroll">
                 <div className="flex flex-col items-center justify-start p-2">
-                  {isiUlangPulsa.map((item: any, index: number) => {
+                  {isiUlangPulsa.map((item: any) => {
                     return (
                       <p
                         key={item.id}

@@ -1,9 +1,6 @@
 import Input from "../../elements/Element/Input/Input"
 import Button from "../../elements/Element/button/Button"
-import FooterAutentikasi from "../../elements/Element/button/Button"
-
 import {BsFillBagCheckFill} from "react-icons/bs"
-import {TiShoppingCart} from "react-icons/ti"
 import {useEffect, useState, useRef} from "react"
 import { Link } from "react-router-dom"
 

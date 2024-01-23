@@ -5,7 +5,7 @@ import NavbarLayout from "../components/Layout/HomeLayout/NavbarLayout";
 
 
 const AddProduct = () => {
-  const [value, setValue] = useState("");
+  const [value] = useState("");
   console.log(value);
   
   useEffect(() => {

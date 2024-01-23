@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import ModalImage from "../../Modal";
 import { useCart } from "../../contex/CartContex";
 const DetailProductLayout = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled] = useState(false);
   const [scrolledImg, setScrolledImg] = useState(false);
   const [isActive, setIsActive] = useState(0);
   const { id } = useParams();

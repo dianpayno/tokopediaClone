@@ -39,12 +39,7 @@ const AddProductLayout = () => {
   const [isFocused, setIsFocused] = useState(false);
   const imageSlice = dataProduk?.image.slice(0, 4);
 
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
+ 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setDataProduk({

@@ -1,27 +1,10 @@
 import { categoryglobal } from "./isiUlangpulsa";
-import Carousel from "react-multi-carousel";
+
 import { Link } from "react-router-dom";
 import "./carousel.css";
 
 const ListCategory = () => {
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 6,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 7,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 3,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
+
   return (
     <div className="flex items-center gap-1 p-5 w-full lg:flex-wrap md:flex-wrap sm:flex-wrap xs:flex-wrap ">
       {/* <Carousel

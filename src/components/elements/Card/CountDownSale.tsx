@@ -4,7 +4,7 @@ import { useCart } from "../../contex/CartContex";
 
 const CountDownSale = () => {
   
-  const { hours, setHours, minutes, setMinutes, seconds, setSeconds } = useCart();
+  const { hours,minutes,seconds} = useCart();
  
  
   return (

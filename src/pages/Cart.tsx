@@ -1,4 +1,4 @@
-import React from 'react'
+
 import NavbarLayout from '../components/Layout/HomeLayout/NavbarLayout'
 import MainCart from '../components/elements/Cart/MainCart'
 
